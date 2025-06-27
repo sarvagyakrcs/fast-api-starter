@@ -1,29 +1,34 @@
 # FastAPI Starter
 
-A production-ready FastAPI authentication starter template providing email verification, JWT tokens, secure cookie-based sessions, and comprehensive user management. The project includes Prisma ORM integration with PostgreSQL, customizable email templates, role-based access control, and a modern Python async architecture.
+<div align="center">
 
-Repository URL:
+A production-ready FastAPI authentication starter template with comprehensive user management, JWT authentication, and email verification.
 
-[https://github.com/sarvagyakrcs/fastapi-starter](https://github.com/sarvagyakrcs/fastapi-starter)
+**[Repository](https://github.com/sarvagyakrcs/fastapi-starter)**
+
+</div>
+
+---
 
 ## Features
 
-* Complete authentication system: registration, login, logout, OTP-based email verification
-* JWT token and secure HTTP-only cookie authentication
-* Email verification system with Resend API integration
-* Prisma ORM with PostgreSQL support
-* Pydantic validation and type hints
-* Async/await support throughout the codebase
-* Role-based access control with support for multiple roles
+- **Authentication System**: Registration, login, logout with JWT tokens
+- **Email Verification**: OTP-based verification using Resend API
+- **Security**: HTTP-only cookies, secure session management
+- **Database**: Prisma ORM with PostgreSQL integration
+- **Modern Python**: Full async/await support, Pydantic validation, type hints
+- **Role-based Access Control**: Multi-role user permission system
+
+---
 
 ## Quick Start
 
 ### Prerequisites
 
-* Python 3.8+
-* PostgreSQL
-* Node.js (for Prisma)
-* Bun, npm, or yarn
+- Python 3.8+
+- PostgreSQL
+- Node.js (for Prisma)
+- Package manager (bun/npm/yarn)
 
 ### Installation
 
@@ -32,147 +37,85 @@ git clone https://github.com/sarvagyakrcs/fastapi-starter.git
 cd fastapi-starter
 ```
 
-Install Node.js packages:
-
+Install dependencies:
 ```bash
+# Node.js packages
 bun install
-# or
-npm install
-# or
-yarn install
-```
+# or npm install / yarn install
 
-Install Python dependencies:
-
-```bash
+# Python dependencies
 uv install
 ```
 
-Set up environment variables in a `.env` file:
+### Configuration
 
+Create `.env` file:
 ```env
 DATABASE_URL="postgresql://username:password@localhost:5432/your_db"
 AUTH_SECRET="your-super-secret-jwt-key"
 RESEND_API_KEY="your-resend-api-key"
 ```
 
-Make the start script executable:
-
-```bash
-chmod +x start.sh
-```
-
-Set up the database:
+### Setup Database
 
 ```bash
 prisma generate
 prisma db push
 ```
 
-Start the server:
-
-```bash
-./start.sh
-```
-
-Access the API:
-
-* Base URL: [http://localhost:8000](http://localhost:8000)
-* Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
-* ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
-
-## API Endpoints Overview
-
-### POST `/auth/register`
-
-Register a new user account.
-
-### POST `/auth/login`
-
-Log in an existing user.
-
-### GET `/auth/logout`
-
-Logs out the current user (requires authentication).
-
-### POST `/auth/verify-otp`
-
-Verifies a user account via email OTP.
-
-## Environment Variables
-
-| Variable         | Description                         | Required |
-| ---------------- | ----------------------------------- | -------- |
-| DATABASE\_URL    | PostgreSQL connection string        | Yes      |
-| AUTH\_SECRET     | JWT signing secret                  | Yes      |
-| RESEND\_API\_KEY | Resend email API key for email OTPs | Yes      |
-
-## Project Structure
-
-```
-fastapi-starter/
-├── app/
-│   ├── controller/
-│   ├── core/
-│   ├── models/
-│   ├── routes/
-│   ├── service/
-│   ├── templates/email/
-│   ├── utils/
-│   └── main.py
-├── prisma/
-│   └── schema.prisma
-├── pyproject.toml
-├── start.sh
-```
-
-## Deployment
-
-Using the provided script:
+### Run Application
 
 ```bash
 chmod +x start.sh
 ./start.sh
 ```
 
-Manual method:
+**Access Points:**
+- API: http://localhost:8000
+- Documentation: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
 
-```bash
-uv sync
-npx prisma generate
-npx prisma db push
-uv run fastapi run app/main.py --host 0.0.0.0 --port 8000
+---
+
+## Project Structure
+
+```
+fastapi-starter/
+├── app/
+│   ├── controller/          # Request handlers
+│   ├── core/               # Core configurations
+│   ├── models/             # Data models
+│   ├── routes/             # API routes
+│   ├── service/            # Business logic
+│   ├── templates/email/    # Email templates
+│   ├── utils/              # Utility functions
+│   └── main.py            # Application entry point
+├── prisma/
+│   └── schema.prisma      # Database schema
+├── pyproject.toml         # Python dependencies
+└── start.sh              # Startup script
 ```
 
-## Development
+---
 
-Run development server:
+## API Endpoints
 
+### Authentication
+
+| Method | Endpoint | Description | Authentication |
+|--------|----------|-------------|----------------|
+| `POST` | `/auth/register` | Register new user | No |
+| `POST` | `/auth/login` | User login | No |
+| `GET` | `/auth/logout` | User logout | Required |
+| `POST` | `/auth/verify-otp` | Verify email OTP | No |
+
+### Request/Response Examples
+
+**Register User**
 ```bash
-uv run fastapi dev app/main.py
-```
+POST /auth/register
+Content-Type: application/json
 
-Reset the database:
-
-```bash
-npx prisma db push --force-reset
-```
-
-View the database:
-
-```bash
-npx prisma studio
-```
-
-## API Endpoints Details
-
-### POST `/auth/register`
-
-Registers a new user.
-
-**Request Body:**
-
-```json
 {
   "name": "John Doe",
   "email": "john@example.com",
@@ -180,64 +123,88 @@ Registers a new user.
 }
 ```
 
-**Response:**
+**Login User**
+```bash
+POST /auth/login
+Content-Type: application/json
 
-```json
-{
-  "message": "User registered successfully. Please check your email for verification."
-}
-```
-
-### POST `/auth/login`
-
-Logs in an existing user.
-
-**Request Body:**
-
-```json
 {
   "email": "john@example.com",
   "password": "securepassword123"
 }
 ```
 
-**Response:**
+**Verify OTP**
+```bash
+POST /auth/verify-otp
+Content-Type: application/json
 
-```json
-{
-  "message": "Logged in successfully."
-}
-```
-
-### GET `/auth/logout`
-
-Logs out the current user.
-
-**Response:**
-
-```json
-{
-  "message": "Logged out successfully."
-}
-```
-
-### POST `/auth/verify-otp`
-
-Verifies an email OTP code.
-
-**Request Body:**
-
-```json
 {
   "email": "john@example.com",
   "otp": "123456"
 }
 ```
 
-**Response:**
+---
 
-```json
-{
-  "message": "Email verified successfully."
-}
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `DATABASE_URL` | PostgreSQL connection string | Yes |
+| `AUTH_SECRET` | JWT signing secret key | Yes |
+| `RESEND_API_KEY` | Resend API key for emails | Yes |
+
+---
+
+## Development
+
+**Development Server**
+```bash
+uv run fastapi dev app/main.py
 ```
+
+**Database Operations**
+```bash
+# Reset database
+prisma db push --force-reset
+
+# View database
+prisma studio
+
+# Generate Prisma client
+prisma generate
+```
+
+**Manual Deployment**
+```bash
+uv sync
+prisma generate
+prisma db push
+uv run fastapi run app/main.py --host 0.0.0.0 --port 8000
+```
+
+---
+
+## Technology Stack
+
+- **Backend**: FastAPI, Python 3.8+
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: JWT tokens, HTTP-only cookies
+- **Email**: Resend API integration
+- **Validation**: Pydantic models
+- **Package Management**: UV for Python, Bun/NPM for Node.js
+
+---
+
+## Support
+
+If this project helped you, consider supporting the development:
+
+**[Buy me a coffee](https://coff.ee/thesarvagya)**
+
+---
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
