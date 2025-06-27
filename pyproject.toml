@@ -12,5 +12,6 @@ dependencies = [
     "pydantic[email]>=2.11.7",
     "python-dotenv>=1.1.1",
     "python-jose[cryptography]>=3.5.0",
+    "resend>=2.10.0",
     "uvicorn>=0.34.3",
 ]

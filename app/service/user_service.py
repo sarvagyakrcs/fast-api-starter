@@ -1,4 +1,5 @@
 from app.models.user import User
+from app.models.auth import RegisterUser
 import asyncio
 from app.utils.prisma import prisma
 from typing import Optional
@@ -21,7 +22,7 @@ class UserService:
                     id=user.id,
                     email=user.email,
                     name=user.name,
-                    emailVerified=user.emailVerified,
+                    emailVerified=user.emailVerified or None,
                     profilePic=user.profilePic,
                     role=user.role,
                     password=user.password
@@ -30,7 +31,7 @@ class UserService:
         except Exception as e:
             raise e
 
-    async def create_user(self, user: User) -> User:
+    async def create_user(self, user: RegisterUser) -> User:
         try:
             existing_user = await self.get_user_by_email(user.email)
 
@@ -45,8 +46,6 @@ class UserService:
                     "email": user.email,
                     "password": hashed_password.decode('utf-8'),
                     "name": user.name,
-                    "role": user.role,
-                    "emailVerified": user.emailVerified,
                 }
             )
 
