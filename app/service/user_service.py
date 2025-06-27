@@ -3,6 +3,7 @@ import asyncio
 from app.utils.prisma import prisma
 from typing import Optional
 from fastapi import HTTPException
+import bcrypt
 
 class UserService:
     def __init__(self):
@@ -17,6 +18,7 @@ class UserService:
             )
             if user:
                 return User(
+                    id=user.id,
                     email=user.email,
                     name=user.name,
                     emailVerified=user.emailVerified,
@@ -35,10 +37,13 @@ class UserService:
             if existing_user is not None:
                 raise HTTPException(status_code=400, detail="User already exists")
             
+            salt = bcrypt.gensalt()
+            hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), salt)
+
             created_user = await prisma.user.create(
                 data={
                     "email": user.email,
-                    "password": user.password,
+                    "password": hashed_password.decode('utf-8'),
                     "name": user.name,
                     "role": user.role,
                     "emailVerified": user.emailVerified,
@@ -97,5 +102,12 @@ class UserService:
             )
         except Exception as e:  
             raise e
+        
+    async def check_password(self, entered_password: str, hashed_password: str) -> bool:
+        try:
+            return bcrypt.checkpw(entered_password.encode('utf-8'), hashed_password.encode('utf-8'))
+        except Exception as e:
+            raise e
+
         
 user_service = UserService()

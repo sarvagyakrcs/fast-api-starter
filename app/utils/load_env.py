@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 import os
-from app.config import ENV_FILE_PATH
+from app.core.config import ENV_FILE_PATH
 
 class LoadEnv:
     def __init__(self, env_path: str):
