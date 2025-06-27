@@ -51,6 +51,7 @@ class UserService:
             )
 
             return User(
+                id=created_user.id,
                 email=created_user.email,
                 name=created_user.name,
                 emailVerified=created_user.emailVerified,

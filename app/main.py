@@ -21,8 +21,4 @@ async def read_root():
         return {"message": "User not found"}
     return {"user": target_user}
 
-@app.post("/register")
-async def register(recieved_user: User):
-    return await user_service.create_user(recieved_user)
-
 app.include_router(auth_router)

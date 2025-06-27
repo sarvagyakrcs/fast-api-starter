@@ -5,7 +5,7 @@ from jose import jwt, JWTError
 from app.utils.load_env import env
 from app.core.config import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM
 from datetime import datetime, timedelta
-from fastapi import HTTPException, Response
+from fastapi import HTTPException, Response, Request
 from pydantic import EmailStr
 from app.models.auth import LoginCredentials
 
@@ -27,7 +27,7 @@ class AuthController:
             if existing_user is None:
                 raise HTTPException(status_code=401, detail="Invalid credentials")
             
-            if not user_service.check_password(credentials.password, existing_user.password):
+            if not await user_service.check_password(credentials.password, existing_user.password):
                 raise HTTPException(status_code=401, detail="Invalid credentials")
             
             expires_delta = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -44,6 +44,21 @@ class AuthController:
             return {
                 "message": "Logged in successfully"
             }
+        except Exception as e:
+            raise e
+        
+    async def logout(self, res: Response) -> dict[str, str]:
+        try:
+            res.delete_cookie(key="x-auth-token")
+            return {
+                "message": "Logged out successfully"
+            }
+        except Exception as e:
+            raise e
+        
+    async def register(self, recieved_user: User) -> dict[str, str]:
+        try:
+            return await user_service.create_user(recieved_user)
         except Exception as e:
             raise e
 
