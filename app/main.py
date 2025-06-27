@@ -1,19 +1,15 @@
-import asyncio
-from prisma import Prisma
+from fastapi import FastAPI
+from app.service.user_service import user
+from app.models.user import User
+app = FastAPI()
 
-async def main() -> None:
-    prisma = Prisma()
-    await prisma.connect()
+@app.get("/")
+async def read_root():
+    target_user = await user.get_user_by_email("thesarvagyakumar@gmail.com")
+    if not target_user:
+        return {"message": "User not found"}
+    return {"user": target_user}
 
-    # write your queries here
-    user = await prisma.user.create(
-        data={
-            'email': 'robert@craigisadasdasde.dev',
-            'password': 'secure_password123'
-        }
-    )
-
-    await prisma.disconnect()
-
-if __name__ == '__main__':
-    asyncio.run(main())
+@app.post("/register")
+async def register(recieved_user: User):
+    return await user.create_user(recieved_user)
