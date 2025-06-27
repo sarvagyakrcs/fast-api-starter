@@ -1,12 +1,8 @@
 # FastAPI Starter
 
-<div align="center">
-
 A production-ready FastAPI authentication starter template with comprehensive user management, JWT authentication, and email verification.
 
 **[Repository](https://github.com/sarvagyakrcs/fastapi-starter)**
-
-</div>
 
 ---
 
