@@ -21,7 +21,7 @@ A production-ready FastAPI authentication starter template with comprehensive us
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3.13+
 - PostgreSQL
 - Node.js (for Prisma)
 - Package manager (bun/npm/yarn)
